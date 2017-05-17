@@ -1,16 +1,33 @@
 name: "OSVOS"
+layer {
+  name: "data"
+  type: "Python"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  python_param {
+    module: "osvos_layer"
+    layer: "OSVOSDataLayer"
+    param_str: "{\'data_root_dir\': \'/main/path/to/davis/augmented/folder/\', \'seed\': 1337, \'pair_list\': \'./solvers/train_pair.txt\'}"
+  }
+}
 
-input: "data"
-input_dim: 1
-input_dim: 3
-input_dim: 480
-input_dim: 854
-
-input: "label"
-input_dim: 1
-input_dim: 1
-input_dim: 480
-input_dim: 854
+layer {
+  name: "data"
+  type: "Python"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  python_param {
+    module: "osvos_layer"
+    layer: "OSVOSDataLayer"
+    param_str: "{\'data_root_dir\': \'/main/path/to/davis/augmented/folder/\', \'seed\': 1337, \'pair_list\': \'./solvers/train_pair.txt\'}"
+  }
+}
 
 layer { bottom: 'data' top: 'conv1_1' name: 'conv1_1' type: "Convolution"
   param { lr_mult: 1 decay_mult: 1 } param { lr_mult: 2 decay_mult: 0}
@@ -98,7 +115,7 @@ layer { bottom: 'conv4_3' top: 'conv4_3_16' name: 'conv4_3_16' type: "Convolutio
 layer { bottom: 'conv5_3' top: 'conv5_3_16' name: 'conv5_3_16' type: "Convolution"
   param { lr_mult: 1 decay_mult: 1 } param { lr_mult: 2 decay_mult: 0}
   convolution_param { engine: CAFFE num_output: 16 pad: 1 kernel_size: 3 weight_filler{ type: "gaussian" std: 0.001}} }
-  
+
 
 ### Multiple conv 2 ###
 layer { type: "Deconvolution" name: 'upsample2_' bottom: 'conv2_2_16' top: 'side-multi2-up'
