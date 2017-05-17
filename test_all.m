@@ -4,7 +4,7 @@ addpath(genpath('lib'));
 
 cd(osvos_root);
 
-save_dir = '/path/to/save/results';
+save_dir = 'DAVIS/Results_osvos';
 names = importdata('src/gt_sets/val_categories.txt');
 
 for ii=1:length(names)
